@@ -1,0 +1,79 @@
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">EventFlow</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+      <ul class="navbar-nav align-items-center">
+        {% if user.is_authenticated %}
+          <li class="nav-item d-flex align-items-center text-white me-3">
+            👋 Hello, {{ user.username }}
+          </li>
+
+          <!-- Home -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">
+              <i class="bi bi-house-door-fill me-1"></i> 
+            </a>
+          </li>
+
+          <!-- Dashboard -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_dashboard' %}">
+              <i class="bi bi-speedometer2 me-1"></i> 
+            </a>
+          </li>
+
+          <!-- My Events -->
+          <li class="nav-item">
+         <a class="nav-link" href="{% url 'my_events' %}">
+         <i class="bi bi-calendar-check me-1"></i> 
+         </a>
+        </li>
+
+          <!-- Create Event -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'create_event' %}">
+              <i class="bi bi-plus-circle-fill me-1"></i> 
+            </a>
+          </li>
+
+          <!-- My Profile -->
+          <a class="nav-link" href="{% url 'user_dashboard' %}">
+          <i class="bi bi-person-circle me-1"></i>
+           </a>
+
+          <!-- Logout -->
+          <li class="nav-item">
+            <form method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link nav-link" style="padding: 0; margin: 0;">
+                <i class="bi bi-box-arrow-right me-1"></i>
+              </button>
+            </form>
+          </li>
+
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Login
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'signup' %}">
+              <i class="bi bi-person-plus-fill me-1"></i> Sign Up
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+      

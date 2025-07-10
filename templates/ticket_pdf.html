@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .ticket-box {
+      border: 2px solid #333;
+      padding: 20px;
+      width: 100%;
+    }
+    .qr {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="ticket-box">
+    <h2>{{ event.title }}</h2>
+    <p><strong>Date:</strong> {{ event.date }}</p>
+    <p><strong>Time:</strong> {{ event.time }}</p>
+    <p><strong>Location:</strong> {{ event.location }}</p>
+    <p><strong>Address:</strong> {{ event.address }}</p>
+    <p><strong>Registered to:</strong> {{ user.username }}</p>
+
+    {% if event.qr_code %}
+      <div class="qr">
+        <img src="{{ event.qr_code.path }}" width="150">
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

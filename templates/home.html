@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- 🔍 Search & Filter Form -->
+<form method="get" class="row mb-4 align-items-end">
+  <div class="col-md-4">
+    <label for="search" class="form-label">Search Events</label>
+    <input type="text" name="q" id="search" class="form-control" placeholder="Title or Location" value="{{ request.GET.q }}">
+  </div>
+  <div class="col-md-4">
+    <label for="date" class="form-label">Filter by Date</label>
+    <select name="date" id="date" class="form-select">
+      <option value="">All Dates</option>
+      <option value="upcoming" {% if request.GET.date == "upcoming" %}selected{% endif %}>Upcoming</option>
+      <option value="past" {% if request.GET.date == "past" %}selected{% endif %}>Past</option>
+    </select>
+  </div>
+  <div class="col-md-4 mt-2 mt-md-0">
+    <button type="submit" class="btn btn-primary w-100">🔎 Search & Filter</button>
+  </div>
+</form>
+
+<!-- ➕ Create Event Button -->
+<div class="text-center mb-4">
+  {% if user.is_authenticated %}
+    <a href="{% url 'create_event' %}" class="btn btn-success">+ Create Event</a>
+  {% endif %}
+</div>
+
+<!-- 📅 Event Cards -->
+<div class="row">
+  {% for event in events %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm h-100">
+        {% if event.image %}
+          <img src="{{ event.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ event.title }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ event.title }}</h5>
+          <p><strong>Date:</strong> {{ event.date }}</p>
+          <p><strong>Time:</strong> {{ event.time }}</p>
+          <p><strong>Address:</strong> {{ event.address }}</p>
+          <p class="card-text">{{ event.description|truncatewords:20 }}</p>
+          <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-primary btn-sm">View More</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-12 text-center mt-4">
+      <div class="alert alert-info">
+        No events found matching your criteria.
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

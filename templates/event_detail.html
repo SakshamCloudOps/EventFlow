@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    {% if event.image %}
+      <img src="{{ event.image.url }}" class="card-img-top" alt="Event image" style="max-height: 400px; object-fit: cover;">
+    {% endif %}
+    <div class="card-body">
+      <h2 class="card-title text-primary">{{ event.title }}</h2>
+      <p class="card-text"><strong>Description:</strong> {{ event.description }}</p>
+      <p class="card-text"><strong>Date:</strong> {{ event.date }}</p>
+      <p class="card-text"><strong>Time:</strong> {{ event.time }}</p>
+      <p class="card-text"><strong>Address:</strong> {{ event.address }}</p>
+      <p class="card-text"><strong>Location:</strong> {{ event.location }}</p>
+      <p class="card-text"><strong>Organizer:</strong> {{ event.organizer.username }}</p>
+
+      {% if event.map_link %}
+        <p><strong>Map:</strong> <a href="{{ event.map_link }}" target="_blank">View on Google Maps</a></p>
+      {% endif %}
+
+      {% if event.qr_code %}
+        <p><strong>QR Code:</strong></p>
+        <img src="{{ event.qr_code.url }}" class="img-thumbnail" width="200">
+      {% endif %}
+
+      <hr>
+
+      {% if user.is_authenticated %}
+        {% if user != event.organizer %}
+          {% if is_registered %}
+            <div class="alert alert-success mt-3" role="alert">
+              ✅ You are already registered for this event.
+            </div>
+            <a href="{% url 'download_ticket' event.id %}" class="btn btn-success mt-2">Download Ticket (PDF)</a>
+          {% else %}
+            <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary mt-2">Register for Event</a>
+          {% endif %}
+        {% endif %}
+      {% else %}
+        <div class="alert alert-warning mt-3" role="alert">
+          Please <a href="{% url 'login' %}">login</a> to register for this event.
+        </div>
+      {% endif %}
+
+      {% if user == event.organizer %}
+        <a href="{% url 'update_event' event.id %}" class="btn btn-warning mt-3 me-2">Edit</a>
+        <a href="{% url 'delete_event' event.id %}" class="btn btn-danger mt-3 me-2">Delete</a>
+        <!-- ✅ New: View Registrations -->
+        <a href="{% url 'view_registrations' event.id %}" class="btn btn-info mt-3">View Registrations</a>
+      {% endif %}
+
+      <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Back</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
